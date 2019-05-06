@@ -3,7 +3,7 @@ body {
 }
 
 .title {
-    margin-top: 5%;
+    margin-top: 2%;
     display: flex;
     font-weight: 800;
     font-size: 52px;
@@ -71,4 +71,24 @@ body {
 #memory {
     width: 220px;
     height: 180px;
+    border: 3px solid blue;
+    padding: 15px;
+    border-radius: 10px;
+}
+#naslov {
+    margin-top: 20px;
+    display: flex;
+    font-weight: 800;
+    font-size: 52px;
+    color: darkblue;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+}
+#minions{
+    width: 350px;
+    height: 300px;
+    margin-bottom: 50px;
+
 }

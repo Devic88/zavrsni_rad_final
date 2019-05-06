@@ -15,7 +15,7 @@ var timer = document.getElementById("timer");
 var interval;
 var timeLeft = 60;
 
-
+// resetovanje scora sa storage-a i brisanje tabele
 resetScores.addEventListener("click", () => {
   try{
     localStorage.removeItem('scoreArray');
@@ -39,22 +39,22 @@ resetScores.addEventListener("click", () => {
 
 });
 
-
+//dugme za novu igru
 newGameBtn.addEventListener("click", () => {
   cards.forEach(card => {
     card.classList.remove("flip");
     card.addEventListener("click", flipCard);
     setTimeout(() => {
-      // let randomPas = Math.floor(Math.random() * 16);
-      // card.style.order = randomPas;
+      let randomPas = Math.floor(Math.random() * 16);
+      card.style.order = randomPas;
     }, 500);
   });
-
+//sakrivanje dugmeta posle pocetka igre
   newGameBtn.style.visibility = "hidden";
   stopGameBtn.style.visibility = "visible";
   startTimer();
 });
-
+//dugme stop , vraca karte na pocetno stanje
 stopGameBtn.addEventListener("click", () => {
   cards.forEach(card => {
     card.removeEventListener("click", flipCard);
@@ -62,11 +62,11 @@ stopGameBtn.addEventListener("click", () => {
   });
   newGameBtn.style.visibility = "visible";
   stopGameBtn.style.visibility = "hidden";
-  timer.innerHTML = "Dobrodosli";
+  timer.innerHTML = "IGRA MEMORIJE";
   clearInterval(interval);
   timeLeft = 60;
 });
-
+//setovanje inputa za score i kalkulacija bodova
 scoreInputField.addEventListener("change", () => {
   newGameBtn.style.visibility = "visible";
   scoreInputField.style.visibility = "hidden";
@@ -78,7 +78,7 @@ scoreInputField.addEventListener("change", () => {
   window.history.scoreArray = highScores;
 
   console.log('hist',window.history)
-
+//upisivanje u tabelu
   table.innerHTML = "";
   let tr = document.createElement("tr");
   tr.setAttribute("class", "tbl-row");
@@ -92,7 +92,7 @@ scoreInputField.addEventListener("change", () => {
   thBodovi.setAttribute("class", "tbl-naziv-kolone");
   thBodovi.innerHTML = "Bodovi";
   table.appendChild(tr);
-
+//local storage
   localStorage.setItem('scoreArray',JSON.stringify(highScores));
 
   console.log(localStorage)
@@ -110,7 +110,7 @@ scoreInputField.addEventListener("change", () => {
     table.appendChild(tr);
   });
 });
-
+// funkcija timer
 startTimer = () => {
   timeLeft = 60;
   timer.innerHTML = "Time left: " + timeLeft;
@@ -131,7 +131,7 @@ startTimer = () => {
     }
   }, 1000);
 };
-
+//funkcija za okretanje karti
 function flipCard() {
   if (lockBoard) return;
   if (this === firstCard) return;
@@ -145,17 +145,18 @@ function flipCard() {
 
   secondCard = this;
   proveriPogodak();
-}
+}//funkcija za proveru poklapanja
 function proveriPogodak() {
   let isMatch = firstCard.dataset.framework === secondCard.dataset.framework;
 
   isMatch ? disableCards() : unflipCards();
 }
+//funcija za pogodjene karte(da ostanu okrenute)
 function disableCards() {
   firstCard.removeEventListener("click", flipCard);
   secondCard.removeEventListener("click", flipCard);
   brojac++;
-  if (brojac == 1) {
+  if (brojac == 8) {
     timer.innerHTML = "POBEDA!!!";
     newGameBtn.style.visibility = "visible";
     cards.forEach(card => {
@@ -168,7 +169,7 @@ function disableCards() {
   }
   resetBoard();
 }
-
+//funkcija za vracanje karti
 function unflipCards() {
   lockBoard = true;
   setTimeout(() => {
@@ -177,10 +178,12 @@ function unflipCards() {
     resetBoard();
   }, 1000);
 }
+//funkcija za reset tabele, da bi mogli popsle okretanja ne uparenih karti da otvaramo dalje
 function resetBoard() {
   [hasFlippedCard, lockBoard] = [false, false];
   [firstCard, secondCard] = [null, null];
 }
+//funkcija za mesanje karti
 (function shuffle() {
   highScores= JSON.parse(localStorage.getItem('scoreArray')) || [];
   scoreInputField.value = "";
